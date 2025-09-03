@@ -89,23 +89,24 @@ The project uses a monorepo structure with separate package.json files:
 
 ### Running the Application
 
-1.  **Run both frontend and backend concurrently:**
+1.  **Run both frontend and backend in development mode (recommended for development):**
     ```bash
-    npm run dev
+    npm run start:dev
+    # or
+    node dev.js
     ```
+    This will start both the backend and frontend servers with hot-reload enabled.
 
 2.  **Start only the backend server:**
     ```bash
     npm run start:backend
     ```
-
     The backend server runs on port `3001` by default.
 
 3.  **Start only the frontend development server:**
     ```bash
     npm run start:frontend
     ```
-
     The React development server will start on port `3000` and open in your default browser.
 
 4.  **Run tests:**

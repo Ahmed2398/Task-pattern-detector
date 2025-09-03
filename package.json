@@ -1,4 +1,14 @@
 {
+  "name": "task-pattern-detector",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "start:dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\"",
+    "build:all": "cd backend && npm run build && cd ../frontend && npm run build",
+    "test:all": "concurrently \"cd backend && npm test\" \"cd frontend && npm test\"",
+    "lint:all": "concurrently \"cd backend && npm run lint\" \"cd frontend && npm run lint\""
+  },
   "dependencies": {
     "concurrently": "^9.2.1"
   }
