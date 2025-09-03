@@ -308,11 +308,11 @@ function validateHeadAndShoulders(startTrough, leftShoulder, head, rightShoulder
     
     // 4. Breakout Confirmation
     const breakoutPoint = detectBreakout(candles, rightShoulder, neckline, priceVolatility);
-    
+
     if (!breakoutPoint && breakoutConfirmationRequired) {
         return null;
     }
-    
+
     // 5. Calculate Metrics
     const metrics = calculatePatternMetrics(head, neckline, breakoutPoint, leftShoulder);
     const symmetryRatio = 1 - symmetryCheck.difference;
@@ -379,7 +379,7 @@ function detectHeadAndShoulders(candles, options = {}) {
     // Step 1: Find significant peaks and troughs
     const peaks = findSignificantPeaks(candles, enhancedOptions);
     const troughs = findSignificantTroughs(candles, enhancedOptions);
-    
+
     if (peaks.length < 3 || troughs.length < 2) {
         return { success: false, reason: "Not enough peaks or troughs found" };
     }
@@ -413,7 +413,7 @@ function detectHeadAndShoulders(candles, options = {}) {
             validPatterns.push(result);
         }
     }
-    
+
     // Return the best pattern (highest confidence) or failure
     if (validPatterns.length > 0) {
         // Sort by confidence (highest first)

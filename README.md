@@ -46,16 +46,23 @@ Follow these instructions to get a copy of the project up and running on your lo
     cd KW
     ```
 
-2.  **Install dependencies for each part of the project:**
+2.  **Install all dependencies at once:**
     ```bash
-    # Install root dependencies (concurrently for running both servers)
+    npm run install:all
+    ```
+
+    This will install dependencies for the root project, frontend, and backend.
+
+    Alternatively, you can install dependencies separately:
+    ```bash
+    # Root dependencies
     npm install
     
-    # Install backend dependencies
+    # Backend dependencies
     cd backend
     npm install
-    
-    # Install frontend dependencies
+
+    # Frontend dependencies
     cd ../frontend
     npm install
     ```
@@ -82,114 +89,33 @@ The project uses a monorepo structure with separate package.json files:
 
 ### Running the Application
 
-#### Quick Start (Recommended)
-
-**Run both frontend and backend concurrently:**
-```bash
-# From the project root directory (KW/)
-node dev.js
-```
-
-This will start:
-- Backend server on http://localhost:3001
-- Frontend development server on http://localhost:3000
-
-The application will automatically open in your browser at http://localhost:3000.
-
-#### Alternative: Running Servers Separately
-
-1.  **Start only the backend server:**
+1.  **Run both frontend and backend concurrently:**
     ```bash
-    cd backend
     npm run dev
     ```
-    The backend server runs on port `3001` with nodemon for auto-reloading.
 
-2.  **Start only the frontend development server:**
+2.  **Start only the backend server:**
     ```bash
-    cd frontend
-    npm start
+    npm run start:backend
     ```
+
+    The backend server runs on port `3001` by default.
+
+3.  **Start only the frontend development server:**
+    ```bash
+    npm run start:frontend
+    ```
+
     The React development server will start on port `3000` and open in your default browser.
 
-#### Running Tests
+4.  **Run tests:**
+    ```bash
+    npm test
+    ```
 
-**Backend tests:**
-```bash
-cd backend
-npm test
-```
+    This will run tests for both frontend and backend.
 
-**Frontend tests:**
-```bash
-cd frontend
-npm test
-```
-
-#### Stopping the Application
-
-- If running with `node dev.js`: Press `Ctrl+C` to stop both servers
-- If running servers separately: Press `Ctrl+C` in each terminal
-
-#### Accessing the Application
-
-Once running, you can:
-- **Frontend**: http://localhost:3000 - Interactive web interface
-- **Backend API**: http://localhost:3001/api/analyze - Direct API access
-
-### Troubleshooting
-
-#### Port Already in Use Error
-If you see `EADDRINUSE: address already in use :::3001`:
-
-1. **Find the process using port 3001:**
-   ```bash
-   lsof -i :3001
-   ```
-
-2. **Kill the process:**
-   ```bash
-   kill -9 <PID>
-   ```
-   (Replace `<PID>` with the process ID from step 1)
-
-3. **Try running again:**
-   ```bash
-   node dev.js
-   ```
-
-#### Frontend Deprecation Warnings
-The frontend may show webpack deprecation warnings. These are harmless and don't affect functionality. They've been suppressed in the current configuration.
-
-#### Backend Not Starting
-If the backend fails to start:
-
-1. **Check if all dependencies are installed:**
-   ```bash
-   cd backend
-   npm install
-   ```
-
-2. **Check Node.js version:**
-   ```bash
-   node --version
-   ```
-   Ensure you're using Node.js v14 or later.
-
-#### Frontend Not Loading
-If the frontend doesn't load:
-
-1. **Check if all dependencies are installed:**
-   ```bash
-   cd frontend
-   npm install
-   ```
-
-2. **Clear npm cache:**
-   ```bash
-   npm cache clean --force
-   npm install
-   ```
+Now, you can use the application in your browser to detect and visualize stock patterns.
 
 ## Software Architecture
 

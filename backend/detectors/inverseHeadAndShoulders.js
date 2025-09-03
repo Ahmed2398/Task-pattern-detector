@@ -184,7 +184,7 @@ function checkTimeSymmetry(leftShoulder, head, rightShoulder, tolerance = 0.40) 
         console.log(`Time symmetry warning: ${(timeDiff * 100).toFixed(1)}% difference`);
         // Not rejecting based on time symmetry, just logging
     }
-    
+
     return { isValid: true, timeDiff };
 }
 
@@ -224,8 +224,8 @@ function detectBreakout(rightShoulder, candles, getNecklineValue) {
         }
     }
     
-    return null;
-}
+        return null;
+    }
 
 /**
  * Calculates pattern metrics including confidence, price target, etc.
@@ -264,25 +264,25 @@ function calculatePatternMetrics(patternData, symmetryRatio, hasBreakout) {
     
     // Adjust confidence based on breakout
     const confidence = hasBreakout ? symmetryRatio : symmetryRatio * 0.9;
-    
+
     return {
-        type: "Inverse Head and Shoulders",
+            type: "Inverse Head and Shoulders",
         confidence: parseFloat(confidence.toFixed(2)),
-        keyPoints: {
-            startPoint: { date: startPeak.date, price: startPeak.high, volume: startPeak.volume },
-            leftShoulder: { date: leftShoulder.date, price: leftShoulder.low, volume: leftShoulder.volume },
-            leftPeak: { date: leftPeak.date, price: leftPeak.high, volume: leftPeak.volume },
-            head: { date: head.date, price: head.low, volume: head.volume },
-            rightPeak: { date: rightPeak.date, price: rightPeak.high, volume: rightPeak.volume },
-            rightShoulder: { date: rightShoulder.date, price: rightShoulder.low, volume: rightShoulder.volume },
-            necklineBreak: breakoutPoint || null,
-        },
-        completed: breakoutPoint !== null,
-        necklineLevel: parseFloat(necklineAtBreakout.toFixed(2)),
-        priceTarget: parseFloat(priceTarget.toFixed(2)),
-        patternHeight: parseFloat(patternHeight.toFixed(2)),
-        timespan: Math.round(timespan),
-        symmetryRatio: parseFloat(symmetryRatio.toFixed(2)),
+            keyPoints: {
+                startPoint: { date: startPeak.date, price: startPeak.high, volume: startPeak.volume },
+                leftShoulder: { date: leftShoulder.date, price: leftShoulder.low, volume: leftShoulder.volume },
+                leftPeak: { date: leftPeak.date, price: leftPeak.high, volume: leftPeak.volume },
+                head: { date: head.date, price: head.low, volume: head.volume },
+                rightPeak: { date: rightPeak.date, price: rightPeak.high, volume: rightPeak.volume },
+                rightShoulder: { date: rightShoulder.date, price: rightShoulder.low, volume: rightShoulder.volume },
+                necklineBreak: breakoutPoint || null,
+            },
+            completed: breakoutPoint !== null,
+            necklineLevel: parseFloat(necklineAtBreakout.toFixed(2)),
+            priceTarget: parseFloat(priceTarget.toFixed(2)),
+            patternHeight: parseFloat(patternHeight.toFixed(2)),
+            timespan: Math.round(timespan),
+            symmetryRatio: parseFloat(symmetryRatio.toFixed(2)),
         volumeProfile
     };
 }
@@ -305,7 +305,7 @@ function validateInverseHeadAndShoulders(patternData, options = {}) {
         breakoutRequired = false,
         minConfidence = 0.6
     } = options;
-    
+
     // 1. Validate head dominance
     if (!checkHeadDominance(leftShoulder, head, rightShoulder)) {
         return null;
@@ -368,91 +368,91 @@ function validateInverseHeadAndShoulders(patternData, options = {}) {
  * @returns {Object} - The forming pattern data or failure object
  */
 function analyzeFormingPattern(candles) {
-    console.log('Looking for forming pattern...');
-    
-    // Find the Dec 27/28 trough - this will be our head
-    const lateDec = candles.filter(c => c.date.startsWith('2022-12-') && parseInt(c.date.split('-')[2]) >= 25);
-    let headTrough = null;
-    if (lateDec.length > 0) {
-        headTrough = lateDec.sort((a, b) => a.low - b.low)[0]; // Lowest price
-        console.log(`Identified potential head: ${headTrough.date} at ${headTrough.low.toFixed(2)}`);
-    } else {
-        console.log('Could not find a suitable head trough in late December');
-        return { success: false, pattern: "Inverse Head and Shoulders", reason: "Could not identify pattern components" };
-    }
-    
-    // Find left shoulder in early December
-    const earlyDec = candles.filter(c => c.date.startsWith('2022-12-') && parseInt(c.date.split('-')[2]) <= 10);
-    let leftShoulder = null;
-    if (earlyDec.length > 0) {
-        leftShoulder = earlyDec.sort((a, b) => a.low - b.low)[0]; // Lowest price
-        console.log(`Identified potential left shoulder: ${leftShoulder.date} at ${leftShoulder.low.toFixed(2)}`);
-    } else {
-        // Try November
-        const lateNov = candles.filter(c => c.date.startsWith('2022-11-') && parseInt(c.date.split('-')[2]) >= 20);
-        if (lateNov.length > 0) {
-            leftShoulder = lateNov.sort((a, b) => a.low - b.low)[0]; // Lowest price
-            console.log(`Identified potential left shoulder: ${leftShoulder.date} at ${leftShoulder.low.toFixed(2)}`);
+        console.log('Looking for forming pattern...');
+        
+        // Find the Dec 27/28 trough - this will be our head
+        const lateDec = candles.filter(c => c.date.startsWith('2022-12-') && parseInt(c.date.split('-')[2]) >= 25);
+        let headTrough = null;
+        if (lateDec.length > 0) {
+            headTrough = lateDec.sort((a, b) => a.low - b.low)[0]; // Lowest price
+            console.log(`Identified potential head: ${headTrough.date} at ${headTrough.low.toFixed(2)}`);
         } else {
-            console.log('Could not find a suitable left shoulder');
+            console.log('Could not find a suitable head trough in late December');
             return { success: false, pattern: "Inverse Head and Shoulders", reason: "Could not identify pattern components" };
         }
-    }
-    
-    // Find right shoulder in January
-    const earlyJan = candles.filter(c => c.date.startsWith('2023-01-') && parseInt(c.date.split('-')[2]) <= 10);
-    let rightShoulder = null;
-    if (earlyJan.length > 0) {
-        rightShoulder = earlyJan.sort((a, b) => a.low - b.low)[0]; // Lowest price 
-        console.log(`Identified potential right shoulder: ${rightShoulder.date} at ${rightShoulder.low.toFixed(2)}`);
-    } else {
-        console.log('Could not find a suitable right shoulder');
-        return { success: false, pattern: "Inverse Head and Shoulders", reason: "Could not identify pattern components" };
-    }
-    
-    // Find peaks for neckline
-    const candlesBetweenLeftAndHead = candles.filter(c => {
-        const date = new Date(c.date);
-        return date > new Date(leftShoulder.date) && date < new Date(headTrough.date);
-    });
-    
-    const candlesBetweenHeadAndRight = candles.filter(c => {
-        const date = new Date(c.date);
-        return date > new Date(headTrough.date) && date < new Date(rightShoulder.date);
-    });
-    
-    let leftPeak = null;
-    let rightPeak = null;
-    
-    if (candlesBetweenLeftAndHead.length > 0) {
-        leftPeak = candlesBetweenLeftAndHead.sort((a, b) => b.high - a.high)[0]; // Highest price
-        console.log(`Identified left peak: ${leftPeak.date} at ${leftPeak.high.toFixed(2)}`);
+        
+        // Find left shoulder in early December
+        const earlyDec = candles.filter(c => c.date.startsWith('2022-12-') && parseInt(c.date.split('-')[2]) <= 10);
+        let leftShoulder = null;
+        if (earlyDec.length > 0) {
+            leftShoulder = earlyDec.sort((a, b) => a.low - b.low)[0]; // Lowest price
+            console.log(`Identified potential left shoulder: ${leftShoulder.date} at ${leftShoulder.low.toFixed(2)}`);
+        } else {
+            // Try November
+            const lateNov = candles.filter(c => c.date.startsWith('2022-11-') && parseInt(c.date.split('-')[2]) >= 20);
+            if (lateNov.length > 0) {
+                leftShoulder = lateNov.sort((a, b) => a.low - b.low)[0]; // Lowest price
+                console.log(`Identified potential left shoulder: ${leftShoulder.date} at ${leftShoulder.low.toFixed(2)}`);
+            } else {
+                console.log('Could not find a suitable left shoulder');
+                return { success: false, pattern: "Inverse Head and Shoulders", reason: "Could not identify pattern components" };
+            }
+        }
+        
+        // Find right shoulder in January
+        const earlyJan = candles.filter(c => c.date.startsWith('2023-01-') && parseInt(c.date.split('-')[2]) <= 10);
+        let rightShoulder = null;
+        if (earlyJan.length > 0) {
+            rightShoulder = earlyJan.sort((a, b) => a.low - b.low)[0]; // Lowest price 
+            console.log(`Identified potential right shoulder: ${rightShoulder.date} at ${rightShoulder.low.toFixed(2)}`);
+        } else {
+            console.log('Could not find a suitable right shoulder');
+            return { success: false, pattern: "Inverse Head and Shoulders", reason: "Could not identify pattern components" };
+        }
+        
+        // Find peaks for neckline
+        const candlesBetweenLeftAndHead = candles.filter(c => {
+            const date = new Date(c.date);
+            return date > new Date(leftShoulder.date) && date < new Date(headTrough.date);
+        });
+        
+        const candlesBetweenHeadAndRight = candles.filter(c => {
+            const date = new Date(c.date);
+            return date > new Date(headTrough.date) && date < new Date(rightShoulder.date);
+        });
+        
+        let leftPeak = null;
+        let rightPeak = null;
+        
+        if (candlesBetweenLeftAndHead.length > 0) {
+            leftPeak = candlesBetweenLeftAndHead.sort((a, b) => b.high - a.high)[0]; // Highest price
+            console.log(`Identified left peak: ${leftPeak.date} at ${leftPeak.high.toFixed(2)}`);
     } else {
         return { success: false, pattern: "Inverse Head and Shoulders", reason: "Could not identify left peak" };
-    }
-    
-    if (candlesBetweenHeadAndRight.length > 0) {
-        rightPeak = candlesBetweenHeadAndRight.sort((a, b) => b.high - a.high)[0]; // Highest price
-        console.log(`Identified right peak: ${rightPeak.date} at ${rightPeak.high.toFixed(2)}`);
+        }
+        
+        if (candlesBetweenHeadAndRight.length > 0) {
+            rightPeak = candlesBetweenHeadAndRight.sort((a, b) => b.high - a.high)[0]; // Highest price
+            console.log(`Identified right peak: ${rightPeak.date} at ${rightPeak.high.toFixed(2)}`);
     } else {
         return { success: false, pattern: "Inverse Head and Shoulders", reason: "Could not identify right peak" };
-    }
-    
-    // Find a start peak before left shoulder
-    const precedingCandles = candles.filter(c => {
-        const date = new Date(c.date);
-        return date < new Date(leftShoulder.date);
-    });
-        
-    let startPeak = null;
-    if (precedingCandles.length > 0) {
-        startPeak = precedingCandles.sort((a, b) => b.high - a.high)[0]; // Highest price
-        console.log(`Identified start peak: ${startPeak.date} at ${startPeak.high.toFixed(2)}`);
-    } else {
-        // Just use the first candle as a fallback
-        startPeak = candles[0];
-        console.log(`Using fallback start peak: ${startPeak.date}`);
-    }
+        }
+            
+        // Find a start peak before left shoulder
+        const precedingCandles = candles.filter(c => {
+            const date = new Date(c.date);
+            return date < new Date(leftShoulder.date);
+        });
+            
+        let startPeak = null;
+        if (precedingCandles.length > 0) {
+            startPeak = precedingCandles.sort((a, b) => b.high - a.high)[0]; // Highest price
+            console.log(`Identified start peak: ${startPeak.date} at ${startPeak.high.toFixed(2)}`);
+        } else {
+            // Just use the first candle as a fallback
+            startPeak = candles[0];
+            console.log(`Using fallback start peak: ${startPeak.date}`);
+        }
     
     // Add index properties for consistency
     if (!leftShoulder.index) {
@@ -484,56 +484,56 @@ function analyzeFormingPattern(candles) {
         const startPeakIdx = candles.findIndex(c => c.date === startPeak.date);
         startPeak.index = startPeakIdx >= 0 ? startPeakIdx : 0;
     }
-    
-    console.log(`\nManually constructing potential forming pattern:`);
-    console.log(`  Left shoulder: ${leftShoulder.date}, ${leftShoulder.low.toFixed(2)}`);
-    console.log(`  Left peak: ${leftPeak.date}, ${leftPeak.high.toFixed(2)}`);
-    console.log(`  Head: ${headTrough.date}, ${headTrough.low.toFixed(2)}`);
-    console.log(`  Right peak: ${rightPeak.date}, ${rightPeak.high.toFixed(2)}`);
-    console.log(`  Right shoulder: ${rightShoulder.date}, ${rightShoulder.low.toFixed(2)}`);
-    
-    // Check if this looks like a valid forming pattern
-    if (headTrough.low < leftShoulder.low * 1.05 && headTrough.low < rightShoulder.low * 1.05) {
-        console.log("✅ Pattern appears to be a forming inverse head and shoulders!");
+        
+        console.log(`\nManually constructing potential forming pattern:`);
+        console.log(`  Left shoulder: ${leftShoulder.date}, ${leftShoulder.low.toFixed(2)}`);
+        console.log(`  Left peak: ${leftPeak.date}, ${leftPeak.high.toFixed(2)}`);
+        console.log(`  Head: ${headTrough.date}, ${headTrough.low.toFixed(2)}`);
+        console.log(`  Right peak: ${rightPeak.date}, ${rightPeak.high.toFixed(2)}`);
+        console.log(`  Right shoulder: ${rightShoulder.date}, ${rightShoulder.low.toFixed(2)}`);
+        
+        // Check if this looks like a valid forming pattern
+        if (headTrough.low < leftShoulder.low * 1.05 && headTrough.low < rightShoulder.low * 1.05) {
+            console.log("✅ Pattern appears to be a forming inverse head and shoulders!");
         
         // Calculate simple neckline
         const necklineLevel = Math.max(leftPeak.high, rightPeak.high);
         const patternHeight = necklineLevel - headTrough.low;
-        
-        // Create a forming pattern object
+                            
+            // Create a forming pattern object
         return {
-            success: true,
-            pattern: "Inverse Head and Shoulders (Forming)",
-            patternData: {
-                type: "Inverse Head and Shoulders",
-                confidence: 0.7, // Hard-coded confidence for forming pattern
-                forming: true,   // Mark as a forming pattern
-                keyPoints: {
-                    startPoint: { date: startPeak.date, price: startPeak.high, volume: startPeak.volume },
-                    leftShoulder: { date: leftShoulder.date, price: leftShoulder.low, volume: leftShoulder.volume },
-                    leftPeak: { date: leftPeak.date, price: leftPeak.high, volume: leftPeak.volume },
-                    head: { date: headTrough.date, price: headTrough.low, volume: headTrough.volume },
-                    rightPeak: { date: rightPeak.date, price: rightPeak.high, volume: rightPeak.volume },
-                    rightShoulder: { date: rightShoulder.date, price: rightShoulder.low, volume: rightShoulder.volume },
-                    necklineBreak: null, // No breakout yet
-                },
-                completed: false,
-                formingPattern: true,
-                // Calculate a simple horizontal neckline
+                success: true,
+                pattern: "Inverse Head and Shoulders (Forming)",
+                patternData: {
+                    type: "Inverse Head and Shoulders",
+                    confidence: 0.7, // Hard-coded confidence for forming pattern
+                    forming: true,   // Mark as a forming pattern
+                    keyPoints: {
+                        startPoint: { date: startPeak.date, price: startPeak.high, volume: startPeak.volume },
+                        leftShoulder: { date: leftShoulder.date, price: leftShoulder.low, volume: leftShoulder.volume },
+                        leftPeak: { date: leftPeak.date, price: leftPeak.high, volume: leftPeak.volume },
+                        head: { date: headTrough.date, price: headTrough.low, volume: headTrough.volume },
+                        rightPeak: { date: rightPeak.date, price: rightPeak.high, volume: rightPeak.volume },
+                        rightShoulder: { date: rightShoulder.date, price: rightShoulder.low, volume: rightShoulder.volume },
+                        necklineBreak: null, // No breakout yet
+                    },
+                    completed: false,
+                    formingPattern: true,
+                    // Calculate a simple horizontal neckline
                 necklineLevel: parseFloat(necklineLevel.toFixed(2)),
-                // Project potential price target (simple projection)
+                    // Project potential price target (simple projection)
                 priceTarget: parseFloat((necklineLevel + patternHeight).toFixed(2)),
                 patternHeight: parseFloat(patternHeight.toFixed(2)),
-                timespan: Math.round((new Date(rightShoulder.date) - new Date(leftShoulder.date)) / (1000 * 60 * 60 * 24)),
-                symmetryRatio: 0.7, // Hard-coded for forming pattern
+                    timespan: Math.round((new Date(rightShoulder.date) - new Date(leftShoulder.date)) / (1000 * 60 * 60 * 24)),
+                    symmetryRatio: 0.7, // Hard-coded for forming pattern
                 volumeProfile: (headTrough.volume > leftShoulder.volume) ? "bullish" : "bearish"
-            }
-        };
-    } else {
-        console.log("❌ Pattern does not match inverse head and shoulders criteria");
-        return { success: false, pattern: "Inverse Head and Shoulders", reason: "Pattern validation failed" };
+                }
+            };
+        } else {
+            console.log("❌ Pattern does not match inverse head and shoulders criteria");
+            return { success: false, pattern: "Inverse Head and Shoulders", reason: "Pattern validation failed" };
+        }
     }
-}
 
 /**
  * Detects the Inverse Head and Shoulders pattern in a given set of OHLC candles
@@ -592,7 +592,7 @@ function detectInverseHeadAndShoulders(candles, options = {}) {
     
     // 7. Count candidates checked
     let candidatesChecked = 0;
-    
+
     // 8. Validate each potential pattern
     for (const triplet of troughTriplets) {
         const { leftShoulder, head, rightShoulder } = triplet;
@@ -601,7 +601,7 @@ function detectInverseHeadAndShoulders(candles, options = {}) {
         console.log(`  Left shoulder: ${leftShoulder.date}, ${leftShoulder.low.toFixed(2)}`);
         console.log(`  Head: ${head.date}, ${head.low.toFixed(2)}`);
         console.log(`  Right shoulder: ${rightShoulder.date}, ${rightShoulder.low.toFixed(2)}`);
-        
+
         // Find the starting peak
         const startPeak = findStartPeak(leftShoulder, peaks);
         if (!startPeak) {
@@ -615,13 +615,13 @@ function detectInverseHeadAndShoulders(candles, options = {}) {
             console.log('  Missing peaks between shoulders and head - skipping');
             continue;
         }
-        
+
         const { leftPeak, rightPeak } = intermediatePeaks;
-        console.log('  Found peaks between shoulders and head:');
-        console.log(`    Left peak: ${leftPeak.date}, ${leftPeak.high.toFixed(2)}`);
-        console.log(`    Right peak: ${rightPeak.date}, ${rightPeak.high.toFixed(2)}`);
-        
-        candidatesChecked++;
+            console.log('  Found peaks between shoulders and head:');
+            console.log(`    Left peak: ${leftPeak.date}, ${leftPeak.high.toFixed(2)}`);
+            console.log(`    Right peak: ${rightPeak.date}, ${rightPeak.high.toFixed(2)}`);
+            
+            candidatesChecked++;
         
         // Create pattern data object for validation
         const patternData = {
@@ -636,16 +636,16 @@ function detectInverseHeadAndShoulders(candles, options = {}) {
         
         // Validate the pattern
         const validationOptions = {
-            shoulderDepthTolerance,
-            breakoutRequired,
-            minConfidence
+                shoulderDepthTolerance,
+                breakoutRequired,
+                minConfidence
         };
         
         const result = validateInverseHeadAndShoulders(patternData, validationOptions);
         
-        if (result) {
+            if (result) {
             console.log(`\n✅ VALID INVERSE HEAD AND SHOULDERS PATTERN FOUND!`);
-            return result;
+                return result;
         }
     }
     

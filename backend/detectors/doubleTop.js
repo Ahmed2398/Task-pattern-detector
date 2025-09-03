@@ -293,7 +293,7 @@ function validateDoubleTop(startTrough, firstPeak, secondPeak, candles, options 
         console.log('❌ FAILED: Peaks too close together');
         return null;
     }
-    
+
     // 2. Check peak similarity
     const peakSimilarity = checkPeakSimilarity(firstPeak, secondPeak, peakSimilarityTolerance);
     console.log(`Peak Height Difference: ${(peakSimilarity.difference * 100).toFixed(2)}% (max allowed: ${(peakSimilarityTolerance * 100)}%)`);
@@ -301,7 +301,7 @@ function validateDoubleTop(startTrough, firstPeak, secondPeak, candles, options 
         console.log('❌ FAILED: Peaks height difference too large');
         return null;
     }
-    
+
     // 3. Find valley between peaks
     const valley = findValley(firstPeak, secondPeak, candles);
     if (!valley) {
@@ -309,7 +309,7 @@ function validateDoubleTop(startTrough, firstPeak, secondPeak, candles, options 
         return null;
     }
     console.log(`Valley: ${valley.date}, Low: ${valley.low.toFixed(2)}`);
-    
+
     // 4. Check valley depth
     const isValleyDeep = validateValleyDepth(firstPeak, valley, minValleyDepth);
     const troughDecline = (firstPeak.high - valley.low) / firstPeak.high;
@@ -318,7 +318,7 @@ function validateDoubleTop(startTrough, firstPeak, secondPeak, candles, options 
         console.log('❌ FAILED: Trough decline too small');
         return null;
     }
-    
+
     // 5. Check neckline level
     const necklineLevel = valley.low;
     console.log(`Neckline Level: ${necklineLevel.toFixed(2)}`);
@@ -326,14 +326,14 @@ function validateDoubleTop(startTrough, firstPeak, secondPeak, candles, options 
         console.log('❌ FAILED: Neckline level higher than peaks');
         return null;
     }
-    
+
     // 6. Breakout confirmation
     const breakoutConfirmationLevel = necklineLevel * (1 - breakoutPercentage);
     console.log(`Breakout Confirmation Level: ${breakoutConfirmationLevel.toFixed(2)} (${breakoutPercentage * 100}% below neckline)`);
     const breakoutPoint = detectBreakout(secondPeak, breakoutConfirmationLevel, candles);
     
     if (breakoutPoint.isConfirmed) {
-        console.log(`✅ Breakout found at: ${breakoutPoint.date}, Price: ${breakoutPoint.price.toFixed(2)}`);
+            console.log(`✅ Breakout found at: ${breakoutPoint.date}, Price: ${breakoutPoint.price.toFixed(2)}`);
     } else {
         console.log('⚠ WARNING: No breakout confirmation found, using last candle as reference');
         console.log(`Reduced confidence due to missing breakout`);
@@ -344,7 +344,7 @@ function validateDoubleTop(startTrough, firstPeak, secondPeak, candles, options 
         startTrough, firstPeak, secondPeak, valley, 
         breakoutPoint, peakSimilarity.difference
     );
-    
+
     return {
         detected: true,
         patternData: patternMetrics
@@ -376,7 +376,7 @@ function detectDoubleTop(candles, options = {}) {
         console.log('❌ FAILED: Not enough data');
         return { detected: false, reason: "Not enough data" };
     }
-    
+
     // 2. Find significant peaks and troughs
     const peaks = findSignificantPeaks(candles);
     const troughs = findSignificantTroughs(candles);
@@ -384,7 +384,7 @@ function detectDoubleTop(candles, options = {}) {
     // 3. Check if we found enough peaks and troughs
     if (peaks.length < 2 || troughs.length < 1) {
         console.log('❌ FAILED: Not enough peaks or troughs found');
-        return { detected: false, reason: "Not enough peaks or troughs found" };
+                return { detected: false, reason: "Not enough peaks or troughs found" };
     }
     
     // 4. Log details about found peaks and troughs
@@ -397,7 +397,7 @@ function detectDoubleTop(candles, options = {}) {
     troughs.slice(0, 5).forEach((trough, i) => {
         console.log(`${i+1}. Date: ${trough.date}, Low: ${trough.low.toFixed(2)}, Index: ${trough.index}`);
     });
-    
+
     // 5. Generate pairs of peaks to test
     console.log('\n===== VALIDATING PEAK COMBINATIONS =====');
     const peakPairs = generatePeakPairs(peaks, troughs);
@@ -418,9 +418,9 @@ function detectDoubleTop(candles, options = {}) {
             candles, validationOptions
         );
         
-        if (result) {
-            console.log('\n✅ VALID DOUBLE TOP PATTERN FOUND!');
-            return result; // Return the first valid pattern found
+            if (result) {
+                console.log('\n✅ VALID DOUBLE TOP PATTERN FOUND!');
+                return result; // Return the first valid pattern found
         }
     }
     

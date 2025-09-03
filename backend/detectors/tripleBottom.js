@@ -160,7 +160,7 @@ function validateBottomSimilarity(firstBottom, secondBottom, thirdBottom, tolera
     const bottomPrices = [firstBottom.low, secondBottom.low, thirdBottom.low];
     const minBottomPrice = Math.min(...bottomPrices);
     const avgBottomPrice = bottomPrices.reduce((a, b) => a + b, 0) / 3;
-    
+
     const priceDiffs = bottomPrices.map(p => Math.abs(p - minBottomPrice) / minBottomPrice);
     const maxDifference = Math.max(...priceDiffs);
     
@@ -187,14 +187,14 @@ function findIntermediatePeaks(firstBottom, secondBottom, thirdBottom, candles) 
     if (candlesBetween1.length === 0 || candlesBetween2.length === 0) {
         return null;
     }
-    
+
     const firstPeak = candlesBetween1.reduce((max, c) => c.high > max.high ? c : max, candlesBetween1[0]);
     const secondPeak = candlesBetween2.reduce((max, c) => c.high > max.high ? c : max, candlesBetween2[0]);
     
     if (!firstPeak || !secondPeak) {
         return null;
     }
-    
+
     return { firstPeak, secondPeak };
 }
 
@@ -238,8 +238,8 @@ function detectBreakout(thirdBottom, necklineLevel, candles) {
         }
     }
     
-    return null;
-}
+        return null;
+    }
 
 /**
  * Calculates pattern metrics including confidence, price target, etc.
@@ -349,7 +349,7 @@ function validateTripleBottom(startPeak, firstBottom, secondBottom, thirdBottom,
         startPeak, bottoms, peaks, breakoutPoint,
         necklineLevel, similarityResult.avgBottomPrice, similarityResult.maxDifference
     );
-    
+
     return {
         detected: true,
         patternData: patternMetrics,
@@ -420,7 +420,7 @@ function detectTripleBottom(candles, options = {}) {
             candles, validationOptions
         );
         
-        if (result) {
+                if (result) {
             console.log('\n✅ VALID TRIPLE BOTTOM PATTERN FOUND!');
             return result;
         }
