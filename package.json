@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
-    "start:dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\"",
+    "start:dev": "concurrently -k -s first \"cd backend && npm run dev\" \"cd frontend && npm start\"",
     "build:all": "cd backend && npm run build && cd ../frontend && npm run build",
     "test:all": "concurrently \"cd backend && npm test\" \"cd frontend && npm test\"",
     "lint:all": "concurrently \"cd backend && npm run lint\" \"cd frontend && npm run lint\""
